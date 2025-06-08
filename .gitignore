@@ -43,3 +43,11 @@ $RECYCLE.BIN/
 **/__pycache__/
 **/.venv/
 **/venv/
+
+.forceignore
+.prettierignore
+.prettierrc
+jest.config.js
+sfdx-project.json
+README.md
+manifest.xml
