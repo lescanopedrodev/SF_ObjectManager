@@ -8,4 +8,5 @@ public interface RepositoryCommands {
     SObject findRecordById(Id id);
     void saveRecord(SObject entity);
     void deleteRecord(Id id);
+    void updateRecord(SObject entity);
 }

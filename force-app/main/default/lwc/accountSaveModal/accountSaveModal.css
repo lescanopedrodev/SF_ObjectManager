@@ -1,0 +1,11 @@
+.footer-section{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 64px;
+}
+
+.body-info-section{
+    display: flex;
+    flex-direction: column;
+}

@@ -22,6 +22,29 @@ public with sharing class AccountController extends SObjectManager {
             responseWrapper = new ResponseWrapper(true);
         } catch (CustomException ex) {
             responseWrapper = new ResponseWrapper(500, ex.getMessage(), ex.getStackTraceString());
+        } catch (Exception ex){
+            responseWrapper = new ResponseWrapper(500, ex.getMessage(), ex.getStackTraceString());
+        }
+        return responseWrapper;
+    }
+
+    /**
+     * @description Crea un objeto Account con una Id especificada del front y la actualiza en la base de datos.
+     * @Date 9 June 2025
+     * @param builder ObjectBuilder
+     * @return ResponseWrapper
+     */
+    @AuraEnabled
+    public static ResponseWrapper updateAccount(ObjectBuilder builder){
+        ResponseWrapper responseWrapper;
+        try{
+            SObject account = buildSObject(builder);
+            AccountRepository.updateRecord(account);
+            responseWrapper = new ResponseWrapper(true);
+        } catch (CustomException ex) {
+            responseWrapper = new ResponseWrapper(500, ex.getMessage(), ex.getStackTraceString());
+        } catch (Exception ex){
+            responseWrapper = new ResponseWrapper(500, ex.getMessage(), ex.getStackTraceString());
         }
         return responseWrapper;
     }
@@ -43,7 +66,7 @@ public with sharing class AccountController extends SObjectManager {
             responseValues.put('account', account);
             
             responseWrapper = new ResponseWrapper(responseValues);
-        } catch (CustomException ex) {
+        } catch (Exception ex) {
             responseWrapper = new ResponseWrapper(500, ex.getMessage(), ex.getStackTraceString());
         }
         return responseWrapper;
@@ -65,6 +88,28 @@ public with sharing class AccountController extends SObjectManager {
             responseWrapper = new ResponseWrapper(responseValues);
         } catch (CustomException ex) {
             responseWrapper = new ResponseWrapper(500, ex.getMessage(), ex.getStackTraceString());
+        } catch (Exception ex) {
+            responseWrapper = new ResponseWrapper(500, ex.getMessage(), ex.getStackTraceString());
+        }
+        return responseWrapper;
+    }
+    
+    /**
+     * @description Elimina un objeto de tipo Account de la base de datos según el Id recibido
+     * @Date 8 June 2025
+     * @param requestWrapper RequestWrapper
+     * @return ResponseWrapper
+     */
+    @AuraEnabled
+    public static ResponseWrapper deleteAccount(RequestWrapper requestWrapper){
+        ResponseWrapper responseWrapper;
+        Map<String, Object> requestValues = requestWrapper.values;
+        Id accountId = String.valueOf(requestValues.get('accountId'));
+        try{
+            AccountRepository.deleteRecord(accountId);
+            responseWrapper = new ResponseWrapper(true);
+        } catch (Exception ex) {
+            responseWrapper = new ResponseWrapper(500, ex.getMessage(), ex.getStackTraceString());
         }
         return responseWrapper;
     }
@@ -81,7 +126,7 @@ public with sharing class AccountController extends SObjectManager {
             tableWrapper.setColumns(getAccountTableColumns());
             tableWrapper.setRows(getAccountTableRows(accounts));
         }catch(Exception ex){
-            throw new CustomException('Error on wrapping table: ' + ex.getMessage());
+            throw new CustomException('Error on wrapping table: ' + ex.getMessage() + ex.getStackTraceString());
         }
         return tableWrapper;
     }
@@ -108,7 +153,11 @@ public with sharing class AccountController extends SObjectManager {
     public static List<AccountTableColumn> getAccountTableColumns(){
         List<AccountTableColumn> columns = new List<AccountTableColumn>();
         for (TableColumnUtils.TableColumnMetadata mdt : TableColumnUtils.getValuesBySpecifiedObject(OBJECT_NAME)) {
-            columns.add(new AccountTableColumn(mdt.fieldName, mdt.label, mdt.type));
+            if(mdt.type == 'action'){
+                columns.add(new AccountTableColumn(mdt));
+            }else{
+                columns.add(new AccountTableColumn(mdt.fieldName, mdt.label, mdt.type));
+            }
         }
         return columns;
     }
@@ -157,9 +206,9 @@ public with sharing class AccountController extends SObjectManager {
         @AuraEnabled public String description {get; set;}
         
         public AccountTableRow(String id, String name, String description){
-            this.id = id;
-            this.name = name;
-            this.description = description;
+            this.id = id ?? '-';
+            this.name = name ?? '-';
+            this.description = description ?? '-';
         }
     }
     
@@ -168,6 +217,10 @@ public with sharing class AccountController extends SObjectManager {
      * @Date: 7 June 2025
      */
     public class AccountTableColumn extends TableManager.TableColumn{
+        
+        public AccountTableColumn(TableColumnUtils.TableColumnMetadata mdt){
+            constructActionColumn(mdt);
+        }
         
         public AccountTableColumn(String fieldName, String label){
             this.fieldName = fieldName;
@@ -179,5 +232,18 @@ public with sharing class AccountController extends SObjectManager {
             this.label = label;
             this.type = type;
         }
+        
+        public void constructActionColumn(TableColumnUtils.TableColumnMetadata mdt){
+            List<Map<String, Object>> actions = new List<Map<String, Object>>();
+            List<String> actionsNames = mdt.actionsNames.split(',');
+            List<String> actionsLabels = mdt.actionsLabels.split(',');
+            for (Integer i = 0; i < actionsNames.size(); i++){
+                actions.add(new Map<String,Object>{'name' => actionsNames[i], 'label' => actionsLabels[i]});
+            }
+            
+            this.type = mdt.type;
+            this.typeAttributes = new Map<String, Object>{ 'rowActions' => actions, 'menuAlignment' => 'right'};
+        }
+        
     }
 }

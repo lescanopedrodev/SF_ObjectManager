@@ -1,0 +1,9 @@
+<template>
+    <lightning-datatable
+      key-field="id"
+      data={tableData.rows}
+      columns={tableData.columns}
+      hide-checkbox-column
+      onrowaction={handleRowAction}
+    ></lightning-datatable>
+</template>

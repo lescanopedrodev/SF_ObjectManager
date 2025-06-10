@@ -3,12 +3,24 @@
     <label>AccountColumnDescription</label>
     <protected>false</protected>
     <values>
+        <field>ActionsLabels__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>ActionsNames__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
         <field>FieldName__c</field>
         <value xsi:type="xsd:string">description</value>
     </values>
     <values>
         <field>Label__c</field>
         <value xsi:type="xsd:string">Descripción de cuenta</value>
+    </values>
+    <values>
+        <field>Order__c</field>
+        <value xsi:type="xsd:double">3.0</value>
     </values>
     <values>
         <field>SpecifiedObject__c</field>

@@ -1,6 +1,18 @@
 <template>
-    <lightning-card>
-        <h1>¡Hola!</h1>
-        <lightning-button label="Test" onclick={handleButton}></lightning-button>
-    </lightning-card>
+    <main class="main-body">
+        <section class="table-section">
+            <c-account-table
+            lwc:ref="accountTable"
+            table-data={tableData} 
+            onedit={handleAccountUpdate} 
+            ondelete={handleAccountDelete}>
+            </c-account-table>
+        </section>
+        <section class="new-account-section">
+            <lightning-button 
+            label="Crear nueva cuenta" 
+            onclick={handleAccountSave}>
+            </lightning-button>
+        </section>
+    </main>
 </template>

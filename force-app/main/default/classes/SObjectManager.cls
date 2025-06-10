@@ -3,14 +3,14 @@
  * @Date 7 June 2025
  * @author Pedro Lescano
  */
-@SuppressWarnings('PMD')
+@SuppressWarnings('PMD.FieldNamingConventions')
 public virtual with sharing class SObjectManager {
     
     private static Integer SUCCESS_CODE = 200;
     private static Integer ERROR_CODE = 500;
     
     /**
-     * @description Método genérico para generar un nuevo SObject a partir de los datos recibidos 
+     * @description Método genérico para generar un nuevo SObject a partir de los datos recibidos
      * @Date 7 June 2025
      * @param builder ObjectBuilder
      * @return SObject
@@ -20,11 +20,19 @@ public virtual with sharing class SObjectManager {
             throw new CustomException('El builder o el tipo de objeto especificado son nulos.');
         }
         
-        Map<String, Object> objectFields = builder.objectFields;
-        Schema.SObjectType objectType = builder.objectType;
+        Map<String, Object> objectFields;
+        Schema.SObjectType objectType;
+        SObject sObjectInstance;
+        Map<String, Schema.SObjectField> validFields;
         
-        SObject sObjectInstance = objectType.newSObject();
-        Map<String, Schema.SObjectField> validFields = objectType.getDescribe().fields.getMap();
+        try {
+            objectFields = builder.objectFields;
+            objectType = Schema.getGlobalDescribe().get(builder.objectType);
+            sObjectInstance = objectType.newSObject();
+            validFields = objectType.getDescribe().fields.getMap();
+        } catch (Exception ex) {
+            throw new CustomException('Error en creación de SObject: ' + ex.getMessage() + ex.getStackTraceString());
+        }
         
         for (String fieldName : objectFields.keySet()) {
             if (!validFields.containsKey(fieldName)) {
@@ -91,13 +99,13 @@ public virtual with sharing class SObjectManager {
      */
     public class ObjectBuilder{
         @AuraEnabled public Map<String, Object> objectFields {get; set;}
-        @AuraEnabled public Schema.SObjectType objectType {get; set;}
+        @AuraEnabled public String objectType {get; set;}
         
         public ObjectBuilder(){
             this.objectFields = new Map<String, Object>();
         }
         
-        public ObjectBuilder(Schema.SObjectType objectType, Map<String, Object> objectFields){
+        public ObjectBuilder(String objectType, Map<String, Object> objectFields){
             this.objectType = objectType;
             this.objectFields = objectFields;
         }
@@ -107,6 +115,7 @@ public virtual with sharing class SObjectManager {
      * @description Objeto wrapper para obtener los datos recibidos desde el invocador
      * @Date 7 June 2025
      */
+    @SuppressWarnings('PMD.EmptyStatementBlock, PMD.ExcessiveParameterList')
     public class RequestWrapper{
         @AuraEnabled public Map<String, Object> values { get; set; }
         
@@ -121,11 +130,14 @@ public virtual with sharing class SObjectManager {
      * @description Objeto wrapper para devolver los datos procesados al invocador
      * @Date 7 June 2025
      */
+    @SuppressWarnings('PMD.EmptyStatementBlock, PMD.ExcessiveParameterList')
     public class ResponseWrapper{
         @AuraEnabled public Integer status { get; set; }
         @AuraEnabled public Map<String, Object> values { get; set; }
         @AuraEnabled public String message { get; set; }
         @AuraEnabled public String stacktrace { get; set; }
+        
+        public ResponseWrapper(){}
         
         public ResponseWrapper(Map<String, Object> values){
             this.values = values;
@@ -168,7 +180,7 @@ public virtual with sharing class SObjectManager {
             this.message = 'An error has occurred!';
         }
     }
-
+    
     /**
      * @description Objeto wrapper para manejar excepciones especiales
      * @Date 7 June 2025

@@ -1,0 +1,17 @@
+.main-body{
+    background-color: #f3f3f3;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+}
+
+.table-section{
+    height: 300px;
+}
+
+.new-account-section{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}
