@@ -3,12 +3,24 @@
     <label>AccountColumnName</label>
     <protected>false</protected>
     <values>
+        <field>ActionsLabels__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>ActionsNames__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
         <field>FieldName__c</field>
         <value xsi:type="xsd:string">name</value>
     </values>
     <values>
         <field>Label__c</field>
         <value xsi:type="xsd:string">Nombre</value>
+    </values>
+    <values>
+        <field>Order__c</field>
+        <value xsi:type="xsd:double">1.0</value>
     </values>
     <values>
         <field>SpecifiedObject__c</field>

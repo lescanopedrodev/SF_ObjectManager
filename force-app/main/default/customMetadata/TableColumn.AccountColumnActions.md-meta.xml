@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-    <label>AccountColumnId</label>
+    <label>AccountColumnActions</label>
     <protected>false</protected>
     <values>
+        <field>ActionsLabels__c</field>
+        <value xsi:type="xsd:string">Editar,Borrar</value>
+    </values>
+    <values>
+        <field>ActionsNames__c</field>
+        <value xsi:type="xsd:string">edit,delete</value>
+    </values>
+    <values>
         <field>FieldName__c</field>
-        <value xsi:type="xsd:string">id</value>
+        <value xsi:nil="true"/>
     </values>
     <values>
         <field>Label__c</field>
-        <value xsi:type="xsd:string">Id</value>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Order__c</field>
+        <value xsi:type="xsd:double">10.0</value>
     </values>
     <values>
         <field>SpecifiedObject__c</field>
@@ -16,6 +28,6 @@
     </values>
     <values>
         <field>Type__c</field>
-        <value xsi:type="xsd:string">text</value>
+        <value xsi:type="xsd:string">action</value>
     </values>
 </CustomMetadata>

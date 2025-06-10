@@ -15,6 +15,16 @@ public with sharing class AccountRepository implements RepositoryCommands {
     public static void saveRecord(SObject account){
         insert (Account) account;
     }
+
+    /**
+     * @description Actualiza un objeto de tipo Account en la base de datos
+     * @Date 9 June 2025
+     * @param account SObject
+     * @return void
+     */
+    public static void updateRecord(SObject account){
+        update account;
+    }
     
     /**
      * @description Devuelve todos los registros de Account en la base de datos

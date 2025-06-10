@@ -2,7 +2,7 @@
  * @description Clase abstracta para manejo de tablas 
  * @Date 7 June 2025
  */
-public abstract with sharing class TableManager {
+public abstract with sharing class TableManager{
     
     public abstract void setRows(List<Object> rows);
     

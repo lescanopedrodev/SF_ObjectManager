@@ -1,0 +1,14 @@
+<template>
+    <lightning-modal-header label="Actualizar cuenta"></lightning-modal-header>
+    <lightning-modal-body>
+        <section class="body-info-section">
+            <c-account-info data={update_data} ondataupdate={handleDataUpdate}></c-account-info>
+        </section>
+    </lightning-modal-body>
+    <lightning-modal-footer>
+        <section class="footer-section">
+            <lightning-button variant="brand-outline" label="Aceptar" onclick={handleUpdate}></lightning-button>
+            <lightning-button variant="destructive-text" label="Cancelar" onclick={closeModal}></lightning-button>
+        </section>
+    </lightning-modal-footer>
+</template>
